@@ -14,7 +14,7 @@ const init = async () => {
   process.env.AWS_REGION           = "us-east-1"
   process.env.cognito_user_pool_id = "us-east-1_TNFobaoDl"
   process.env.cognito_client_id    = "test_cognito_client_id"
-  process.env.cognito_server_client_id = "1kdhn284frj5okpubeh9asbmg73v"
+  process.env.cognito_server_client_id = "1kdhn284frj5okpubeh9asbmg7"
   
   const { credentials } = await promisify(awscred.load)()
   

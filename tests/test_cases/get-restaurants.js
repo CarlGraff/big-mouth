@@ -12,6 +12,7 @@ describe(`When we invoke the GET /restaurants endpoint`, () => {
     expect(res.body).to.have.lengthOf(8)
 
     for (let restaurant of res.body) {
+      //console.log(restaurant)
       expect(restaurant).to.have.property('name')
       expect(restaurant).to.have.property('image')
     }
