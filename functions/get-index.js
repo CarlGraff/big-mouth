@@ -5,6 +5,7 @@ const aws4 = require('aws4')
 const URL = require('url')
 
 const restaurantsApiRoot = process.env.restaurants_api
+const ordersApiRoot = process.env.orders_api
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
 const awsRegion = process.env.AWS_REGION
@@ -47,15 +48,22 @@ const getRestaurants = async () => {
 
 module.exports.handler = async (event, context) => {
   const template = loadHtml()
+  console.log('after loaded')
   const restaurants = await getRestaurants()
+  console.log('after getRestaurants')
   const dayOfWeek = days[new Date().getDay()]
+  console.log('after getday')
+  console.log("-------")
+  console.log(ordersApiRoot)
+  console.log("-------")
   const view = { 
     awsRegion,
     cognitoUserPoolId,
     cognitoClientId,
     dayOfWeek, 
     restaurants,
-    searchUrl: `${restaurantsApiRoot}/search`
+    searchUrl: `${restaurantsApiRoot}/search`,
+    placeOrderUrl: `${ordersApiRoot}`
   }
   const html = Mustache.render(template, view)
   const response = {

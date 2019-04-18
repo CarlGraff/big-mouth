@@ -36,6 +36,12 @@ functions:
           - - "https://"
             - Ref: ApiGatewayRestApi
             - ".execute-api.${opt:region}.amazonaws.com/${opt:stage}/restaurants"
+      orders_api: 
+        Fn::Join:
+          - ''
+          - - "https://"
+            - Ref: ApiGatewayRestApi
+            - ".execute-api.${opt:region}.amazonaws.com/${opt:stage}/orders"
       cognito_user_pool_id: us-east-1_TNFobaoDl
       cognito_client_id: 30bm8rig8hvd4g074qt6vil68j
 
@@ -86,9 +92,8 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-
     orderEventsStream: 
-      Type:AWS::Kinesis::Stream
+      Type: AWS::Kinesis::Stream
       Properties:
         Name: order-events
         ShardCount: 1
