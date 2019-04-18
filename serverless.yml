@@ -55,6 +55,17 @@ functions:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/us-east-1_TNFobaoDl
     environment:
       restaurants_table: restaurants
+  
+  place-order:
+    handler: functions/place-order.handler
+    events:
+      - http:
+          path: /orders
+          method: post
+          authorizer:
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/us-east-1_TNFobaoDl
+    environment:
+      order_events_stream: order-events
 
 resources:
   Resources:
@@ -71,3 +82,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+    orderEventsStream: 
+      Type:AWS::Kinesis::Stream
+      Properties:
+        Name: order-events
+        ShardCount: 1
