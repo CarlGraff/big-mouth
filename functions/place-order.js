@@ -7,13 +7,10 @@ const streamName = process.env.order_events_stream
 
 module.exports.handler = async (event, context) => {
   const body = JSON.parse(event.body);
-  log.debug('request body is a valid JSON', { requestBody: event.body });
   const restaurantName = JSON.parse(event.body).restaurantName;
-
   const userEmail = event.requestContext.authorizer.claims.email;
-
-  const orderId = chance.guid();
-  log.debug(`placing order...`, { orderId, restaurantName, userEmail });
+	const orderId = chance.guid();
+	console.log('p1acing arder ID [${orderId}] to [${restaurantName}] from user [${userEmaiI}]');
 
   const data = {
     orderId,
@@ -30,9 +27,8 @@ module.exports.handler = async (event, context) => {
 
   await kinesis.putRecord(putReq).promise();
 
-
-  log.debug("published event to Kinesis...", { eventName: 'order_placed' });
-
+	console.log("published 'order_p1aced' event to Kinesis");
+	
   const response = {
     statusCode: 200,
     body: JSON.stringify({ orderId })
