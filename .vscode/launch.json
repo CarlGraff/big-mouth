@@ -39,6 +39,24 @@
           }
       },
       {
+        "type": "node",
+        "request": "launch",
+        "name": "place_order",
+        "program": "${workspaceFolder}/node_modules/.bin/sls",
+        "args":[
+            "invoke",
+            "local",
+            "-f",
+            "place-order",
+            "-p",
+            "examples/place-order.json"
+        ],
+        "env":{
+            "restaurants_table": "restaurants"
+        }
+    },
+
+      {
           "type": "node",
           "request": "launch",
           "name": "get-index",
