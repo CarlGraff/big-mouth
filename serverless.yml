@@ -35,13 +35,13 @@ functions:
           - ''
           - - "https://"
             - Ref: ApiGatewayRestApi
-            - ".execute-api.us-east-1.amazonaws.com/dev/restaurants"
+            - ".execute-api.${opt:region, 'us-east-1'}.amazonaws.com/${opt:stage, 'dev'}/restaurants"
       orders_api: 
         Fn::Join:
           - ''
           - - "https://"
             - Ref: ApiGatewayRestApi
-            - ".execute-api.us-east-1.amazonaws.com/dev/orders"
+            - ".execute-api.${opt:region, 'us-east-1'}.amazonaws.com/${opt:stage, 'dev'}/orders"
       cognito_user_pool_id: us-east-1_TNFobaoDl
       cognito_client_id: 30bm8rig8hvd4g074qt6vil68j
 
