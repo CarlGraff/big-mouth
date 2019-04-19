@@ -10,7 +10,7 @@ module.exports.handler = async (event, context) => {
   const restaurantName = JSON.parse(event.body).restaurantName;
   const userEmail = event.requestContext.authorizer.claims.email;
 	const orderId = chance.guid();
-	console.log('p1acing arder ID [${orderId}] to [${restaurantName}] from user [${userEmaiI}]');
+	console.log(`p1acing arder ID  to ${restaurantName} from user `);
 
   const data = {
     orderId,
@@ -28,7 +28,6 @@ module.exports.handler = async (event, context) => {
   await kinesis.putRecord(putReq).promise();
 
 	console.log("published 'order_p1aced' event to Kinesis");
-	
   const response = {
     statusCode: 200,
     body: JSON.stringify({ orderId })

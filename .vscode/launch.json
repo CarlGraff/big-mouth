@@ -1,0 +1,63 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "type": "node",
+          "request": "launch",
+          "name": "get-restaurants",
+          "program": "${workspaceFolder}/node_modules/.bin/sls",
+          "args":[
+              "invoke",
+              "local",
+              "-f",
+              "get-restaurants",
+              "-d",
+              "{}"
+          ],
+          "env":{
+              "restaurants_table": "restaurants"
+          }
+      },
+      {
+          "type": "node",
+          "request": "launch",
+          "name": "search-restaurants",
+          "program": "${workspaceFolder}/node_modules/.bin/sls",
+          "args":[
+              "invoke",
+              "local",
+              "-f",
+              "search-restaurants",
+              "-p",
+              "examples/search-restaurants.json"
+          ],
+          "env":{
+              "restaurants_table": "restaurants"
+          }
+      },
+      {
+          "type": "node",
+          "request": "launch",
+          "name": "get-index",
+          "program": "${workspaceFolder}/node_modules/.bin/sls",
+          "args":[
+              "invoke",
+              "local",
+              "-f",
+              "get-index",
+              "-d",
+              "{}"
+          ],
+          "env":{
+              "restaurants_api": "https://57q1hvww24.execute-api.us-east-1.amazonaws.com/dev/restaurants",       
+              "cognito_user_pool_id": "us-east-1_TNFobaoDl",
+              "cognito_client_id": "30bm8rig8hvd4g074qt6vil68j"
+          }
+      }
+
+
+  ]
+}

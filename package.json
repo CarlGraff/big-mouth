@@ -15,7 +15,7 @@
     "cheerio": "^1.0.0-rc.2",
     "lodash": "^4.17.10",
     "mocha": "^5.2.0",
-    "serverless": "^1.40.0",
+    "serverless": "^1.41.0",
     "serverless-pseudo-parameters": "^1.6.0"
   },
   "dependencies": {
