@@ -7,6 +7,7 @@ const sns = new AWS.SNS();
 const getRecords = require('../lib/kinesis').getRecords;
 const streamName = process.env.order_events_stream;
 const topicArn = process.env.restaurant_notification_topic;
+console.log("top")
 
 module.exports.handler = async (event, context) => {
   let records = getRecords(event);

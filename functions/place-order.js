@@ -27,10 +27,10 @@ module.exports.handler = async (event, context) => {
     PartitionKey: orderId,
     StreamName: streamName
   };
-
+  console.log(putReq)
   await kinesis.putRecord(putReq, function(err, data) {
             if (err) {
-               console.error(err); 
+               console.log(err); 
             }
             else {
                console.log(data);  
