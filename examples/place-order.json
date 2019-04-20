@@ -36,7 +36,7 @@
   "requestContext": {
     "authorizer": {
       "claims": {
-        "email": "foo@bar.com"
+        "email": "graffcarl@gmail.com"
       }
     },
     "accountId": "123456789012",

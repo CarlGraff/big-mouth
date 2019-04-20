@@ -28,7 +28,14 @@ module.exports.handler = async (event, context) => {
     StreamName: streamName
   };
 
-  await kinesis.putRecord(putReq).promise();
+  await kinesis.putRecord(putReq, function(err, data) {
+            if (err) {
+               console.error(err); 
+            }
+            else {
+               console.log(data);  
+            }
+      }).promise();
 
 	console.log("published 'order_p1aced' event to Kinesis");
   const response = {
