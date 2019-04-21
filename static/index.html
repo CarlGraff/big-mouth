@@ -286,6 +286,7 @@
             restaurantsList.empty();
 
             for (var restaurant of restaurants) {
+              restaurant.name = restaurant.name.replace(/'/g, '&#39;'); 
               restaurantsList.append(`
               <li class="restaurant">
                 <ul class="column-container" onclick='placeOrder("${restaurant.name}")'>

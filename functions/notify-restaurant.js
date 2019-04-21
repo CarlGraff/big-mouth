@@ -10,10 +10,13 @@ const topicArn = process.env.restaurant_notification_topic;
 console.log("top")
 
 module.exports.handler = async (event, context) => {
+  console.log('Received event:', JSON.stringify(event, null, 2));
   let records = getRecords(event);
+  console.log(JSON.stringify(records))
   let orderPlaced = records.filter(r => r.eventType === 'order_placed');
 
   for (let order of orderPlaced) {
+    console.log(JSON.stringify(order))
     let pubReq = {
       Message: JSON.stringify(order),
       TopicArn: topicArn
@@ -30,7 +33,7 @@ module.exports.handler = async (event, context) => {
       PartitionKey: order.orderId,
       StreamName: streamName
     };
-    await kinesis.putRecord(putRecordReq).promise();
+    await kinesis.putRecord(putReq).promise();
 
     console.log(`published 'restaurant_notified' event to Kinesis`);
   }
