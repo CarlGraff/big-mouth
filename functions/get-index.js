@@ -48,14 +48,8 @@ const getRestaurants = async () => {
 
 module.exports.handler = async (event, context) => {
   const template = loadHtml()
-  console.log('after loaded')
   const restaurants = await getRestaurants()
-  console.log('after getRestaurants')
   const dayOfWeek = days[new Date().getDay()]
-  console.log('after getday')
-  console.log("-------")
-  console.log(ordersApiRoot)
-  console.log("-------")
   const view = { 
     awsRegion,
     cognitoUserPoolId,

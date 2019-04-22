@@ -24,6 +24,7 @@ provider:
       Action: sns:Publish
       Resource: 
         - arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:restaurant-notification
+        - arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:restaurant-notification-retry
         - arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:user-notification    
 
 functions:
@@ -89,6 +90,16 @@ functions:
     environment:
       order_events_stream: order-events
       restaurant_notification_topic: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:restaurant-notification
+      restaurant_notification_retry_topic: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:restaurant-notification-retry
+  
+  retry-notify-restaurant:
+    handler: functions/retry-notify-restaurant.handler
+    events:
+      - sns: restaurant-notification-retry
+    environment:
+      order_events_stream: order-events
+      restaurant_notification_topic: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:restaurant-notification
+    onError: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:restaurant-notification-dlq
 
   accept-order:
     handler: functions/accept-order.handler
@@ -107,6 +118,15 @@ functions:
     environment:
       order_events_stream: order-events
       user_notification_topic: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:user-notification
+
+  fulfill-order:
+    handler: functions/fulfill-order.handler
+    events:
+      - http:
+          path: /orders/complete
+          method: post
+    environment:
+      order_events_stream: order-events
 
 resources:
   Resources:
@@ -135,6 +155,13 @@ resources:
       Properties:
         DisplayName: restaurant-notification
         TopicName: restaurant-notification
+
+    restaurantNotificationDLQTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: restaurant-notification-dlq
+        TopicName: restaurant-notification-dlq
+
 
     userNotificationTopic:
       Type: AWS::SNS::Topic
