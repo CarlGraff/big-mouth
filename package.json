@@ -16,7 +16,9 @@
     "lodash": "^4.17.11",
     "mocha": "^5.2.0",
     "serverless": "^1.41.0",
-    "serverless-pseudo-parameters": "^1.6.0"
+    "serverless-iam-roles-per-function": "^1.0.4",
+    "serverless-pseudo-parameters": "^1.6.0",
+    "serverless-sam": "^0.2.0"
   },
   "dependencies": {
     "aws-sdk": "^2.273.1",

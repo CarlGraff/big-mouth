@@ -35,7 +35,6 @@ functions:
         Action: execute-api:Invoke
         Resource: arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:*/*/GET/restaurants
 
-
   get-restaurants:
     handler: functions/get-restaurants.handler
     events:
@@ -48,10 +47,7 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action: dynamodb:scan
-        Resource:
-          Fn::GetAtt:
-            - restaurantsTable
-            - Arn
+        Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/restaurants
 
   search-restaurants:
     handler: functions/search-restaurants.handler
@@ -64,12 +60,9 @@ functions:
     environment:
       restaurants_table: restaurants
     iamRoleStatements:
-    - Effect: Allow
-      Action: dynamodb:scan
-      Resource:
-        Fn::GetAtt:
-          - restaurantsTable
-          - Arn
+      - Effect: Allow
+        Action: dynamodb:scan
+        Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/restaurants
 
   place-order:
     handler: functions/place-order.handler
@@ -104,7 +97,7 @@ functions:
         Resource: 
           - arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:restaurant-notification
           - arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:restaurant-notification-retry
-
+  
   retry-notify-restaurant:
     handler: functions/retry-notify-restaurant.handler
     events:
@@ -135,7 +128,7 @@ functions:
       - Effect: Allow
         Action: kinesis:PutRecord
         Resource: arn:aws:kinesis:#{AWS::Region}:#{AWS::AccountId}:stream/order-events
-
+  
   notify-user:
     handler: functions/notify-user.handler
     events:
@@ -182,7 +175,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-    orderEventsStream: 
+    orderEventsStream:
       Type: AWS::Kinesis::Stream
       Properties:
         Name: order-events
@@ -200,10 +193,8 @@ resources:
         DisplayName: restaurant-notification-dlq
         TopicName: restaurant-notification-dlq
 
-
     userNotificationTopic:
       Type: AWS::SNS::Topic
       Properties:
         DisplayName: user-notification
         TopicName: user-notification
-
