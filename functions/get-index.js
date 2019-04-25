@@ -3,6 +3,7 @@ const Mustache = require('mustache')
 const http = require('superagent-promise')(require('superagent'), Promise)
 const aws4 = require('aws4')
 const URL = require('url')
+const log = require('../lib/log')
 
 const restaurantsApiRoot = process.env.restaurants_api
 const ordersApiRoot = process.env.orders_api
@@ -16,9 +17,9 @@ let html
 
 function loadHtml () {
   if (!html) {
-    console.log('loading index.html...')
+    //console.log('loading index.html...')
     html = fs.readFileSync('static/index.html', 'utf-8')
-    console.log('loaded')
+    //console.log('loaded')
   }
   
   return html
@@ -48,7 +49,9 @@ const getRestaurants = async () => {
 
 module.exports.handler = async (event, context) => {
   const template = loadHtml()
+  log.debug('loaded HTML template')
   const restaurants = await getRestaurants()
+  log.debug(`loaded #{restaurants.length} restaurants`)
   const dayOfWeek = days[new Date().getDay()]
   const view = { 
     awsRegion,
@@ -60,6 +63,8 @@ module.exports.handler = async (event, context) => {
     placeOrderUrl: `${ordersApiRoot}`
   }
   const html = Mustache.render(template, view)
+  log.debug(`generated #{html.length} bytes`)
+
   const response = {
     statusCode: 200,
     headers: {

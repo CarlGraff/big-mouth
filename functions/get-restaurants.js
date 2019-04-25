@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk')
 const dynamodb = new AWS.DynamoDB.DocumentClient()
+const log = require('../lib/log')
 
 const defaultResults = process.env.defaultResults || 8
 const tableName = process.env.restaurants_table
@@ -11,6 +12,7 @@ const getRestaurants = async (count) => {
   }
 
   const resp = await dynamodb.scan(req).promise()
+  log.debug(`fetched #{restaurants.length} restaurants`)
   return resp.Items
 }
 
