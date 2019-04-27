@@ -8,8 +8,8 @@ const init = async () => {
     return
   }
 
-  process.env.TEST_ROOT            = "https://57q1hvww24.execute-api.us-east-1.amazonaws.com/dev"
-  process.env.restaurants_api      = "https://57q1hvww24.execute-api.us-east-1.amazonaws.com/dev/restaurants"
+  process.env.TEST_ROOT            = "https://dxnrid3y0k.execute-api.us-east-1.amazonaws.com/dev"
+  process.env.restaurants_api      = "https://dxnrid3y0k.execute-api.us-east-1.amazonaws.com/dev/restaurants"
   process.env.restaurants_table    = "restaurants"
   process.env.AWS_REGION           = "us-east-1"
   process.env.cognito_user_pool_id = "us-east-1_TNFobaoDl"

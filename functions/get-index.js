@@ -4,6 +4,8 @@ const http = require('superagent-promise')(require('superagent'), Promise)
 const aws4 = require('aws4')
 const URL = require('url')
 const log = require('../lib/log')
+const middy = require('middy')
+const sampleLogging = require('../middleware/sample-logging')
 
 const restaurantsApiRoot = process.env.restaurants_api
 const ordersApiRoot = process.env.orders_api
@@ -47,11 +49,11 @@ const getRestaurants = async () => {
   return (await httpReq).body
 }
 
-module.exports.handler = async (event, context) => {
+const handler = async (event, context) => {
   const template = loadHtml()
   log.debug('loaded HTML template')
   const restaurants = await getRestaurants()
-  log.debug(`loaded #{restaurants.length} restaurants`)
+  log.debug(`loaded ${restaurants.length} restaurants`)
   const dayOfWeek = days[new Date().getDay()]
   const view = { 
     awsRegion,
@@ -63,7 +65,8 @@ module.exports.handler = async (event, context) => {
     placeOrderUrl: `${ordersApiRoot}`
   }
   const html = Mustache.render(template, view)
-  log.debug(`generated #{html.length} bytes`)
+  log.debug(`debug generated ${html.length} bytes`)
+  log.info(`info generated ${html.length} bytes`)
 
   const response = {
     statusCode: 200,
@@ -75,3 +78,6 @@ module.exports.handler = async (event, context) => {
 
   return response
 }
+
+module.exports.handler = middy(handler)
+  .use(sampleLogging({ sampleRate: 0.2 }));
