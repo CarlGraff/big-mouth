@@ -9,13 +9,19 @@ custom:
   logLevel:
     prod: WARN
     default: INFO
+  serverless-iam-roles-per-function:
+    defaultInherit: true
 
 provider:
   name: aws
   runtime: nodejs8.10
   environment:
-    log_level: INFO
+    log_level: DEBUG
     #log_level: ${self:custom.logLevel.${self:custom.stage}, self:custom.logLevel.default}
+  iamRoleStatements:
+    - Effect: Allow
+      Action: cloudwatch:PutMetricData
+      Resource: '*'
 
 functions:
   get-index:
@@ -39,6 +45,7 @@ functions:
             - ".execute-api.${opt:region, 'us-east-1'}.amazonaws.com/${opt:stage, 'dev'}/orders"
       cognito_user_pool_id: us-east-1_TNFobaoDl
       cognito_client_id: 30bm8rig8hvd4g074qt6vil68j
+      async_metrics: true
     iamRoleStatements:
       - Effect: Allow
         Action: execute-api:Invoke
@@ -54,6 +61,7 @@ functions:
           authorizer: aws_iam
     environment:
       restaurants_table: restaurants
+      async_metrics: true
     iamRoleStatements:
       - Effect: Allow
         Action: dynamodb:scan
@@ -72,6 +80,7 @@ functions:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/us-east-1_TNFobaoDl
     environment:
       restaurants_table: restaurants
+      async_metrics: true
     iamRoleStatements:
     - Effect: Allow
       Action: dynamodb:scan
@@ -90,6 +99,7 @@ functions:
             arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/us-east-1_TNFobaoDl
     environment:
       order_events_stream: order-events
+      async_metrics: true
     iamRoleStatements:
       - Effect: Allow
         Action: kinesis:PutRecord
@@ -140,6 +150,7 @@ functions:
           method: post
     environment:
       order_events_stream: order-events
+      async_metrics: true
     iamRoleStatements:
       - Effect: Allow
         Action: kinesis:PutRecord
@@ -170,6 +181,7 @@ functions:
           method: post
     environment:
       order_events_stream: order-events
+      async_metrics: true
     iamRoleStatements:
       - Effect: Allow
         Action: kinesis:PutRecord

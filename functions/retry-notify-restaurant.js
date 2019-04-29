@@ -1,8 +1,11 @@
 'use strict';
 
 const notify = require('../lib/notify');
+const middy = require('middy');
+const sampleLogging = require('../middleware/sample-logging');
+const flushMetrics = require('../middleware/flush-metrics');
 
-module.exports.handler = async (event, context) => {
+const handler = async (event, context) => {
   const order = JSON.parse(event.Records[0].Sns.Message);
   order.retried = true;
 
@@ -13,3 +16,7 @@ module.exports.handler = async (event, context) => {
     return err;
   }
 };
+
+module.exports.handler = middy(handler)
+  .use(sampleLogging({ sampleRate: 0.2 }))
+  .use(flushMetrics)
