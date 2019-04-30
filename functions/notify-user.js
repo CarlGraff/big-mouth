@@ -2,7 +2,8 @@
 
 const _          = require('lodash');
 const getRecords = require('../lib/kinesis').getRecords;
-const AWS        = require('aws-sdk');
+const AWSXray    = require('aws-xray-sdk');
+const AWS        = AWSXray.captureAWS(require('aws-sdk'));
 const kinesis    = new AWS.Kinesis();
 const sns        = new AWS.SNS();
 const streamName = process.env.order_events_stream;

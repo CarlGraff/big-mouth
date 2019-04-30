@@ -1,12 +1,15 @@
-const fs = require("fs")
-const Mustache = require('mustache')
-const http = require('superagent-promise')(require('superagent'), Promise)
-const aws4 = require('aws4')
-const URL = require('url')
-const log = require('../lib/log')
-const cloudwatch = require('../lib/cloudwatch')
-const middy = require('middy')
+const co            = require("co");
+const Promise       = require("bluebird");
+const fs            = require("fs")
+const Mustache      = require('mustache')
+const http          = require('superagent-promise')(require('superagent'), Promise)
+const aws4          = require('aws4')
+const URL           = require('url')
+const log           = require('../lib/log')
+const cloudwatch    = require('../lib/cloudwatch')
+const middy         = require('middy')
 const sampleLogging = require('../middleware/sample-logging')
+const AWSXRay       = require('aws-xray-sdk');
 
 const restaurantsApiRoot = process.env.restaurants_api
 const ordersApiRoot = process.env.orders_api
@@ -47,7 +50,25 @@ const getRestaurants = async () => {
     httpReq.set('X-Amz-Security-Token', opts.headers['X-Amz-Security-Token'])
   }
 
-  return (await httpReq).body
+  //return (await httpReq).body
+
+  return new Promise((resolve, reject) => {
+    let f = co.wrap(function*(subsegment) {
+      subsegment.addMetadata('url', restaurantsApiRoot);
+      
+      try {
+        let body = (yield httpReq).body;
+        subsegment.close();
+        resolve(body);
+      } catch (err) {
+        subsegment.close(err);
+        reject(err);
+      }
+    });
+    let segment = AWSXRay.getSegment();
+    AWSXRay.captureAsyncFunc("getting restaurant", f, segment);
+  });
+
 }
 
 const handler = async (event, context) => {

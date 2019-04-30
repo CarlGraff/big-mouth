@@ -1,10 +1,11 @@
-const AWS = require('aws-sdk')
-const dynamodb = new AWS.DynamoDB.DocumentClient()
-const log = require('../lib/log')
+const AWSXray    = require('aws-xray-sdk');
+const AWS        = AWSXray.captureAWS(require('aws-sdk'));
+const dynamodb   = new AWS.DynamoDB.DocumentClient()
+const log        = require('../lib/log')
 const cloudwatch = require('../lib/cloudwatch')
 
 const defaultResults = process.env.defaultResults || 8
-const tableName = process.env.restaurants_table
+const tableName      = process.env.restaurants_table
 
 const getRestaurants = async (count) => {
   const req = {

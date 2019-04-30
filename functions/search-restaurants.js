@@ -1,8 +1,8 @@
-const AWS = require('aws-sdk')
-const dynamodb = new AWS.DynamoDB.DocumentClient()
-
+const AWSXray        = require('aws-xray-sdk');
+const AWS            = AWSXray.captureAWS(require('aws-sdk'));
+const dynamodb       = new AWS.DynamoDB.DocumentClient()
 const defaultResults = process.env.defaultResults || 8
-const tableName = process.env.restaurants_table
+const tableName      = process.env.restaurants_table
 
 const findRestaurantsByTheme = async (theme, count) => {
   const req = {
